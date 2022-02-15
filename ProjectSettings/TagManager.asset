@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Soldier
+  - Hospital
+  - Tree
   layers:
   - Default
   - TransparentFX
