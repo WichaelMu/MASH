@@ -9,7 +9,7 @@ public class MASHUI : MonoBehaviour
 
 	void Start()
 	{
-		HelicopterPickup.OnGameStatus += UpdateGameUI;
+		Helicopter.OnGameStatus += UpdateGameUI;
 	}
 
 	void UpdateGameUI(bool bIsGameOver)
@@ -19,6 +19,6 @@ public class MASHUI : MonoBehaviour
 
 	void OnDestroy()
 	{
-		HelicopterPickup.OnGameStatus -= UpdateGameUI;
+		Helicopter.OnGameStatus -= UpdateGameUI;
 	}
 }

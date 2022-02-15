@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class HelicopterPickup : MonoBehaviour
+public class Helicopter : MonoBehaviour
 {
 	public static Action<bool> OnGameStatus;
 
