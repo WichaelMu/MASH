@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Helicopter))]
 public class HelicopterMovement : MonoBehaviour
 {
 
@@ -11,22 +11,27 @@ public class HelicopterMovement : MonoBehaviour
 	SpriteRenderer SpriteRenderer;
 	Rigidbody2D Rigidbody;
 	Vector3 Velocity;
+	bool bStopControls = false;
+
 	Helicopter Self;
-	bool bIsDead = false;
 
 	Camera MainCamera;
 	float HelicopterXLength = 1;
 	float HelicopterYHeight = 1;
+
+	static readonly Vector3 RotateVector = new Vector3(0, 0, -15f);
 
 	void Start()
 	{
 		Rigidbody = GetComponent<Rigidbody2D>();
 		SpriteRenderer = GetComponent<SpriteRenderer>();
 
-		Helicopter.OnGameStatus += (b) => bIsDead = b;
+		Self = GetComponent<Helicopter>();
+		Self.OnGameStatus += OnGameStatus;
 
 		BoxCollider2D Collider = GetComponent<BoxCollider2D>();
-		(HelicopterXLength, HelicopterYHeight) = (Collider.size.x, Collider.size.y);
+		HelicopterXLength = Collider.size.x * .5f;
+		HelicopterYHeight = Collider.size.y * .5f;
 
 		MainCamera = Camera.main;
 	}
@@ -34,12 +39,13 @@ public class HelicopterMovement : MonoBehaviour
 
 	void Update()
 	{
-		if (bIsDead)
+		if (bStopControls)
 			return;
 
 		float HorizontalInput = Input.GetAxisRaw("Horizontal");
 		float VerticalInput = Input.GetAxisRaw("Vertical");
 
+		// Flip when going left. Ensure input is not zero. For some reason, don't put this condition in the assignment of flipX.
 		if (HorizontalInput != 0)
 			SpriteRenderer.flipX = HorizontalInput < 0;
 
@@ -58,13 +64,27 @@ public class HelicopterMovement : MonoBehaviour
 
 		Velocity = new Vector3(HorizontalInput, VerticalInput).normalized;
 		Velocity *= Speed;
+
+		transform.localEulerAngles = RotateVector * HorizontalInput;
 	}
 
 	void FixedUpdate()
 	{
-		if (bIsDead)
+		if (bStopControls)
 			return;
 
 		Rigidbody.MovePosition(transform.position + Velocity * Time.fixedDeltaTime);
+	}
+
+	void OnGameStatus(bool bHasLost)
+	{
+		bStopControls = true;
+		transform.eulerAngles = Vector3.zero;
+		GetComponent<Animator>().SetBool("bIsDowning", bHasLost);
+	}
+
+	void OnDestroy()
+	{
+		Self.OnGameStatus -= OnGameStatus;
 	}
 }

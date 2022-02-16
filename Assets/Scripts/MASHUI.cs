@@ -6,6 +6,7 @@ public class MASHUI : MonoBehaviour
 {
 
 	[SerializeField] TMPro.TextMeshProUGUI GameStatus;
+	[SerializeField] Helicopter Helicopter;
 
 	void Start()
 	{
