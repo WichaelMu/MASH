@@ -180,7 +180,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 'SOLDIERS##RESCUED
+
+    SOLDIERS##IN##HELICOPTER'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1479,7 +1481,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.0489498, g: 0.18867922, b: 0.08155783, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1685,7 +1687,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c9a1e3bc7cde04396a83ef91c2e1e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 10
+  Health: 100
+  MovementSpeed: 10
+  bFlipSpriteOnInput: 1
+  bSpriteIsFacingNegativeX: 0
 --- !u!50 &528200175
 Rigidbody2D:
   serializedVersion: 4
@@ -2339,6 +2344,24 @@ MonoBehaviour:
   SSounds:
   - ACSource: {fileID: 8300000, guid: d01ecad8f224a874a8726c7404bc0f7c, type: 3}
     sName: ONPICKUP
+    fVolume: 1
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: a2b51445a40548f4bb0b94a93ad51604, type: 3}
+    sName: ENGINE
+    fVolume: 1
+    fPitch: 1
+    bLoop: 1
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: 949840bb53a59674fa82cb9820605ad5, type: 3}
+    sName: CRASH
+    fVolume: 0.1
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: 3eb7201ee72623f4b900827ee945792c, type: 3}
+    sName: EXPLOSION
     fVolume: 1
     fPitch: 1
     bLoop: 0

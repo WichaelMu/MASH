@@ -1,5 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using MW.Audio;
+using MW.Diagnostics;
+using MW.Easing;
 
 public class Helicopter : MonoBehaviour
 {
@@ -21,6 +25,7 @@ public class Helicopter : MonoBehaviour
 		UpdateCounter();
 
 		AllSoldiers = GameObject.FindGameObjectsWithTag("Soldier").Length;
+		MAudio.AudioInstance.Play("ENGINE");
 	}
 
 	void OnTriggerEnter2D(Collider2D c)
@@ -47,7 +52,7 @@ public class Helicopter : MonoBehaviour
 		T.eulerAngles = InjuredSolidersHolder.eulerAngles;
 
 		SoldiersInHelicopter++;
-		Audio.AAudioInstance.Play("ONPICKUP", true);
+		Audio.AudioInstance.Play("ONPICKUP", true);
 	}
 
 	void DropAtHospital()
@@ -68,6 +73,8 @@ public class Helicopter : MonoBehaviour
 		DisplayGameStatus(true);
 
 		RemoveSoldiers();
+
+		StartCoroutine(PlayCrashingSound());
 	}
 
 	void UpdateCounter()
@@ -86,5 +93,28 @@ public class Helicopter : MonoBehaviour
 		{
 			Destroy(T.gameObject);
 		}
+	}
+
+	IEnumerator PlayCrashingSound()
+	{
+		MAudio.AudioInstance.Stop("ENGINE");
+		MAudio.AudioInstance.Play("CRASH");
+		yield return new WaitForSeconds(.5f);
+		MAudio.AudioInstance.Play("EXPLOSION");
+
+		float t = 0;
+		MSound Crash = MAudio.AudioInstance.Find("CRASH");
+		float InitialVolume = Crash.fVolume;
+
+		while (t <= 1)
+		{
+			t += Time.deltaTime;
+			float Interpol = Interpolate.Linear(0, InitialVolume, t);
+			Crash.fVolume = InitialVolume - Interpol;
+
+			yield return null;
+		}
+
+		MAudio.AudioInstance.Stop("CRASH");
 	}
 }

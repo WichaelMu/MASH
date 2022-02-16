@@ -7,7 +7,7 @@
         <member name="T:MW.Audio.MAudio">
             <summary>The Audio controller for in-game sounds.</summary>
         </member>
-        <member name="P:MW.Audio.MAudio.AAudioInstance">
+        <member name="P:MW.Audio.MAudio.AudioInstance">
             <summary>A unique reference to the only Audio object in the scene.</summary>
         </member>
         <member name="F:MW.Audio.MAudio.bMuteAllByDefault">
@@ -34,44 +34,96 @@
         <member name="M:MW.Audio.MAudio.Find(System.String)">
             <summary>Returns a sound in the Sounds array.</summary>
             <param name="n">The name of the requested sound.</param>
-            <returns>The sound clip of the requested sound.</returns>
+            <returns>The <see cref="T:MW.Audio.MSound"/> of the requested sound.</returns>
         </member>
         <member name="M:MW.Audio.MAudio.IsPlaying(System.String)">
             <summary>Whether or not sound of name n is playing.</summary>
             <param name="sName">The name of the sound to query.</param>
-        </member>
-        <member name="P:MW.Behaviour.MPlayer.Position">
-            <summary>The world position of this player.</summary>
-        </member>
-        <member name="M:MW.Behaviour.MPlayer.ForwardInput(System.Single)">
-            <summary>Moves this player forward. Default direction is transform.forward.</summary>
-            <remarks>Uses <see cref="M:UnityEngine.Rigidbody.MovePosition(UnityEngine.Vector3)"/> to enforce movement, by default.</remarks>
-            <param name="Throw">Input vector.</param>
-        </member>
-        <member name="M:MW.Behaviour.MPlayer.RightInput(System.Single)">
-            <summary>Moves this player right. Default direction is transform.right.</summary>
-            <remarks>Uses <see cref="M:UnityEngine.Rigidbody.MovePosition(UnityEngine.Vector3)"/> to enforce movement, by default.</remarks>
-            <param name="Throw">Input vector.</param>
         </member>
         <member name="M:MW.Behaviour.MPlayer.Jump(System.Single)">
             <summary>Adds force upwards to this player. Default direction is MVector.Up.</summary>
             <remarks>Uses <see cref="M:UnityEngine.Rigidbody.AddForce(UnityEngine.Vector3)"/> to enforce jumping, by default.</remarks>
             <param name="Force">The amount of force to apply.</param>
         </member>
-        <member name="M:MW.Behaviour.MPlayer.SetMovementSpeed(System.Single)">
+        <member name="F:MW.Behaviour.Player.OnTakeDamage">
+            <summary>Called when damage is taken. First float is new <see cref="F:MW.Behaviour.Player.Health"/>, second is the inflicting damage.</summary>
+        </member>
+        <member name="P:MW.Behaviour.Player.Position">
+            <summary>The world position of this player.</summary>
+        </member>
+        <member name="M:MW.Behaviour.Player.InitialisePlayer">
+            <summary>Initialises this player's settings.</summary>
+        </member>
+        <member name="M:MW.Behaviour.Player.SetMovementSpeed(System.Single)">
             <summary>Sets MovementSpeed to NewMovementSpeed.</summary>
-            <remarks>Also updates the default, <see cref="F:MW.Behaviour.MPlayer.InitialMovementSpeed"/>. <see cref="M:MW.Behaviour.MPlayer.TemporaryMovementSpeed(System.Single,System.Single)"/> will revert to NewMovementSpeed.</remarks>
+            <remarks>Also updates the default, <see cref="F:MW.Behaviour.Player.InitialMovementSpeed"/>. <see cref="M:MW.Behaviour.Player.TemporaryMovementSpeed(System.Single,System.Single)"/> will revert to NewMovementSpeed.</remarks>
             <param name="NewMovementSpeed">The new Movement Speed of this player.</param>
         </member>
-        <member name="M:MW.Behaviour.MPlayer.TemporaryMovementSpeed(System.Single,System.Single)">
+        <member name="M:MW.Behaviour.Player.TemporaryMovementSpeed(System.Single,System.Single)">
             <summary>Temporarily modifies this player's MovementSpeed.</summary>
             <remarks>Calling StopCoroutine on the returned IEnumerator will not reset the player's MovementSpeed.</remarks>
             <param name="TemporaryMovementSpeed">The temporary MovementSpeed.</param>
             <param name="Duration">The time in seconds in which TemporaryMovementSpeed will be in effect.</param>
             <returns>The IEnumerator that handles timing.</returns>
         </member>
-        <member name="M:MW.Behaviour.MPlayer.ResetMovementSpeed">
-            <summary>Set this player's <see cref="F:MW.Behaviour.MPlayer.MovementSpeed"/> to <see cref="F:MW.Behaviour.MPlayer.InitialMovementSpeed"/>.</summary>
+        <member name="M:MW.Behaviour.Player.ResetMovementSpeed">
+            <summary>Set this player's <see cref="F:MW.Behaviour.Player.MovementSpeed"/> to <see cref="F:MW.Behaviour.Player.InitialMovementSpeed"/>.</summary>
+        </member>
+        <member name="M:MW.Behaviour.Player.MovementInput(System.Single,System.Single)">
+            <summary>Registers movement from input.</summary>
+            <remarks>Needs to be overidden from <see cref="T:MW.Behaviour.Player"/>.</remarks>
+            <param name="ForwardThrow">Horizontal input.</param>
+            <param name="RightThrow">Vertical input.</param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:MW.Behaviour.Player.ReceiveMovementInput(System.Boolean)">
+            <summary>Set this Player's ability to receive <see cref="M:MW.Behaviour.Player.MovementInput(System.Single,System.Single)"/>.</summary>
+            <param name="bStopReceivingInput">True if this Player should stop receiving input.</param>
+        </member>
+        <member name="M:MW.Behaviour.Player.HasStoppedReceivingMovementInput">
+            <summary>Whether or not this Player is allowed to receive <see cref="M:MW.Behaviour.Player.MovementInput(System.Single,System.Single)"/>.</summary>
+            <returns>True if this Player is not allowed to receive <see cref="M:MW.Behaviour.Player.MovementInput(System.Single,System.Single)"/>.</returns>
+        </member>
+        <member name="M:MW.Behaviour.Player.GetHealth">
+            <summary>Get this Player's Health.</summary>
+            <returns>Current health.</returns>
+        </member>
+        <member name="M:MW.Behaviour.Player.TakeDamage(System.Single)">
+            <summary>Deduct InDamage from this Player's Health.</summary>
+            <param name="InDamage">The damage to inflict on this Player.</param>
+            <returns>True if this Player <see cref="M:MW.Behaviour.Player.IsDead"/>.</returns>
+        </member>
+        <member name="M:MW.Behaviour.Player.TakeDamage(System.Single,System.Single@)">
+            <inheritdoc cref="M:MW.Behaviour.Player.TakeDamage(System.Single)"/> <param name="InDamage"></param>
+            <param name="HealthPercentageRemaining">The percentage of health remaining after taking InDamage.</param>
+        </member>
+        <member name="M:MW.Behaviour.Player.IsDead">
+            <summary>If this Player's is considered dead.</summary>
+            <returns>True if <see cref="M:MW.Behaviour.Player.GetHealth"/> &lt;= 0.</returns>
+        </member>
+        <member name="M:MW.Behaviour.Tick`1.#ctor(MW.EEquation,System.Single,System.Action{`0,System.Single})">
+            <summary>Creates a new separate update loop.</summary>
+            <param name="Equation">The <see cref="T:MW.EEquation"/> to use to Tick.</param>
+            <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
+            <param name="OnTick">The method to call every tick. The executed T and interpolated Time is passed as a parameter.</param>
+        </member>
+        <member name="M:MW.Behaviour.Tick`1.#ctor(MW.EEquation,System.Single,System.Action{`0,System.Single},System.Single,System.Single)">
+            <inheritdoc cref="M:MW.Behaviour.Tick`1.#ctor(MW.EEquation,System.Single,System.Action{`0,System.Single})"/>
+            <param name="Equation"></param> <param name="DurationInSeconds"></param> <param name="OnTick"></param>
+            <param name="StartInterpolation">Where to begin interpolation.</param>
+            <param name="EndInterpolation">Where to end interpolation.</param>
+        </member>
+        <member name="M:MW.Behaviour.Tick`1.SetData(MW.MArray{`0})">
+            <summary>Sets the data for the next execution of <see cref="F:MW.Behaviour.Tick`1.OnTick"/>.</summary>
+            <remarks>All entries in <see cref="F:MW.Behaviour.Tick`1.Data"/> will be executed linearly.</remarks>
+            <param name="Data">The data to set for the next <see cref="F:MW.Behaviour.Tick`1.OnTick"/>.</param>
+        </member>
+        <member name="M:MW.Behaviour.Tick`1.TogglePauseTick">
+            <summary>Pauses this Tick from executing until this (<see cref="M:MW.Behaviour.Tick`1.TogglePauseTick"/>) is called again.</summary>
+            <remarks>This is a toggle.</remarks>
+        </member>
+        <member name="M:MW.Behaviour.Tick`1.Terminate">
+            <summary>Stop executing this Tick.</summary>
         </member>
         <member name="T:MW.Pathfinding.Pathfinding`1">
             <summary>Provides the A* Pathfinding implementation for T.</summary>
@@ -281,29 +333,29 @@
         <member name="T:MW.Diagnostics.EVerbosity">
             <summary>UnityEngine.Debug.Log<see cref="T:MW.Diagnostics.EVerbosity"/>().</summary>
         </member>
-        <member name="M:MW.Diagnostics.Log.Print(System.Object[])">
-            <summary><see cref="M:UnityEngine.Debug.Log(System.Object)"/> every object.</summary>
+        <member name="M:MW.Diagnostics.Log.P(System.Object[])">
+            <summary><see cref="M:UnityEngine.Debug.Log(System.Object)"/> every object with <see cref="M:System.Object.ToString"/>.</summary>
             <param name="debug">The list of <see cref="T:System.Object"/>s to log separated by a space.</param>
         </member>
-        <member name="M:MW.Diagnostics.Log.PrintError(System.Object[])">
-            <summary><see cref="M:UnityEngine.Debug.LogError(System.Object)"/> every object.</summary>
+        <member name="M:MW.Diagnostics.Log.E(System.Object[])">
+            <summary><see cref="M:UnityEngine.Debug.LogError(System.Object)"/> every object with <see cref="M:System.Object.ToString"/>.</summary>
             <param name="debug">The list of <see cref="T:System.Object"/>s to log separated by a space.</param>
         </member>
-        <member name="M:MW.Diagnostics.Log.PrintWarning(System.Object[])">
-            <summary><see cref="M:UnityEngine.Debug.LogWarning(System.Object)"/> every object.</summary>
+        <member name="M:MW.Diagnostics.Log.W(System.Object[])">
+            <summary><see cref="M:UnityEngine.Debug.LogWarning(System.Object)"/> every object with <see cref="M:System.Object.ToString"/>.</summary>
             <param name="debug">The list of <see cref="T:System.Object"/>s to log separated by a space.</param>
         </member>
         <member name="T:MW.Diagnostics.Stacktrace">
             <summary>Provides a stacktrace for code.</summary>
         </member>
         <member name="M:MW.Diagnostics.Stacktrace.Here(MW.Diagnostics.EVerbosity)">
-            <summary>Stacktrace using <see cref="M:MW.Diagnostics.Log.Print(System.Object[])"/> with <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity.</summary>
-            <param name="verbosity">The <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity of the <see cref="M:MW.Diagnostics.Log.Print(System.Object[])"/>.</param>
+            <summary>Stacktrace using <see cref="M:MW.Diagnostics.Log.P(System.Object[])"/> with <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity.</summary>
+            <param name="verbosity">The <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity of the <see cref="M:MW.Diagnostics.Log.P(System.Object[])"/>.</param>
         </member>
         <member name="M:MW.Diagnostics.Stacktrace.Here(System.String,MW.Diagnostics.EVerbosity)">
-            <summary>Stacktrace using <see cref="M:MW.Diagnostics.Log.Print(System.Object[])"/> with <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity and a <see cref="T:System.String"/> message.</summary>
+            <summary>Stacktrace using <see cref="M:MW.Diagnostics.Log.P(System.Object[])"/> with <see cref="T:MW.Diagnostics.EVerbosity"/> verbosity and a <see cref="T:System.String"/> message.</summary>
             <param name="sMessage">The <see cref="T:System.String"/> message to show.</param>
-            <param name="verbosity">The <see cref="T:MW.Diagnostics.EVerbosity"/> of the <see cref="M:MW.Diagnostics.Log.Print(System.Object[])"/>.</param>
+            <param name="verbosity">The <see cref="T:MW.Diagnostics.EVerbosity"/> of the <see cref="M:MW.Diagnostics.Log.P(System.Object[])"/>.</param>
         </member>
         <member name="T:MW.Diagnostics.Stopwatch">
             <summary>Track execution time of code.</summary>
@@ -330,6 +382,9 @@
         <member name="M:MW.Diagnostics.Stopwatch.ToSeconds(System.Int64)">
             <summary>Converts milliseconds to seconds.</summary>
             <param name="lMilliseconds">Milliseconds to convert.</param>
+        </member>
+        <member name="T:MW.Editor.ReadOnlyAttribute">
+            <summary>Sets this property to be visible in the Unity Editor, but is not editable.</summary>
         </member>
         <member name="T:MW.EButton">
             <summary>The mouse buttons on a standard mouse.</summary>
@@ -358,8 +413,12 @@
             <param name="bUp">Whether or not to check if this button is released.</param>
             <returns>If Stroke was pressed or Held.</returns>
         </member>
+        <member name="M:MW.IO.I.Any">
+            <summary>Identical to <see cref="P:UnityEngine.Input.anyKey"/>.</summary>
+            <returns>True if a key or a mouse button was pressed.</returns>
+        </member>
         <member name="M:MW.IO.O.Out(System.Object[])">
-            <summary>Identical to <see cref="M:MW.Diagnostics.Log.Print(System.Object[])"/>.</summary>
+            <summary>Identical to <see cref="M:MW.Diagnostics.Log.P(System.Object[])"/>.</summary>
             <param name="debug">The list of <see cref="T:System.Object"/>s to log separated by a space.</param>
         </member>
         <member name="M:MW.Kinetic.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
@@ -376,35 +435,40 @@
         <member name="F:MW.Kinetic.Kinematics.kVelocityRatio">
             <summary>Convert inspector speed to m/s.</summary>
         </member>
-        <member name="M:MW.Kinetic.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
-            <summary>If the distance between from and to is less than or EqualTo detection.</summary>
-            <param name="vFrom">The reference coordinate to compare.</param>
-            <param name="vTo">The target coordinate to compare.</param>
-            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
-            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MW.Kinetic.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
-            <summary>If the distance between from and to is less than or EqualTo detection.</summary>
-            <param name="vFrom">The reference coordinate to compare.</param>
-            <param name="vTo">The target coordinate to compare.</param>
-            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
-            <returns></returns>
+        <member name="M:MW.Kinetic.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
+            <summary>If the distance between From and To is &lt;= Tolerance.</summary>
+            <param name="From">The reference <see cref="T:UnityEngine.Vector3"/> to compare.</param>
+            <param name="To">The target <see cref="T:UnityEngine.Vector3"/> to compare.</param>
+            <param name="Tolerance">The range that is considered if From has 'reached' To.</param>
+            <returns>True if the distance between From and To are &lt;= Tolerance.</returns>
         </member>
         <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
-            <summary>Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.</summary>
-            <param name="RSelf">The Rigidbody to move.</param>
-            <param name="ATarget">The Transform destination.</param>
-            <param name="fVelocity">The rate at which self moves towards target.</param>
-            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+            <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+            <param name="Rigidbody">The <see cref="T:UnityEngine.Rigidbody"/> to move.</param>
+            <param name="Target">The <see cref="T:UnityEngine.Transform"/> destination.</param>
+            <param name="Velocity">The rate at which self moves towards target.</param>
+            <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
         </member>
         <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
-            <summary>Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.</summary>
-            <param name="RSelf">The Rigidbody to move.</param>
-            <param name="vTarget">The destination coordinates.</param>
-            <param name="fVelocity">The rate at which self moves towards target.</param>
-            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+            <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+            <param name="Rigidbody">The <see cref="T:UnityEngine.Rigidbody"/> to move.</param>
+            <param name="Target">The destination coordinates.</param>
+            <param name="Velocity">The rate at which self moves towards target.</param>
+            <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody2D,UnityEngine.Transform,System.Single,System.Single)">
+            <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+            <param name="Rigidbody">The <see cref="T:UnityEngine.Rigidbody2D"/> to move.</param>
+            <param name="Target">The <see cref="T:UnityEngine.Transform"/> destination.</param>
+            <param name="Velocity">The rate at which self moves towards target.</param>
+            <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody2D,UnityEngine.Vector3,System.Single,System.Single)">
+            <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+            <param name="Rigidbody">The <see cref="T:UnityEngine.Rigidbody2D"/> to move.</param>
+            <param name="Target">The destination coordinates.</param>
+            <param name="Velocity">The rate at which self moves towards target.</param>
+            <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
         </member>
         <member name="M:MW.Kinetic.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
             <summary>The direction in which to avoid colliding with obstacles.</summary>
@@ -414,35 +478,13 @@
             <param name="lmObstacles">The layer to avoid colliding with.</param>
             <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
         </member>
-        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.EEquation)">
-            <summary>
-            Returns the function associated to the easingFunction enum. This fDuration returned should be cached as it allocates memory
-            to return.
-            </summary>
-            <param name="EEasingFunction">The enum associated with the easing function.</param>
-            <returns>The easing function</returns>
-        </member>
         <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.EEquation)">
             <summary>
             Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
-            function can get you the speed at a given time (normalized).
+            function can get you the speed at a given time (normalised).
             </summary>
-            <param name="easingFunction"></param>
+            <param name="Function"></param>
             <returns>The derivative function</returns>
-        </member>
-        <member name="M:MW.Easing.Tick`1.#ctor(MW.EEquation,System.Single,System.Action{`0})">
-            <summary>Creates a new separate update loop.</summary>
-            <param name="Equation">The <see cref="T:MW.EEquation"/> to use to Tick.</param>
-            <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
-            <param name="OnTick">The method to call every tick. T is passed as a parameter.</param>
-        </member>
-        <member name="M:MW.Easing.Tick`1.#ctor(MW.EEquation,System.Single,System.Action{`0},System.Single,System.Single)">
-            <summary>Creates a new separate update loop.</summary>
-            <param name="Equation">The <see cref="T:MW.EEquation"/> to use to Tick.</param>
-            <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
-            <param name="OnTick">The method to call every tick. T is passed as a parameter.</param>
-            <param name="StartInterpolation">Where to begin interpolation.</param>
-            <param name="EndInterpolation">Where to end interpolation.</param>
         </member>
         <member name="M:MW.Math.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
             <param name="EEquation">The <see cref="T:MW.EEquation"/> to use to accelerate.</param>
@@ -510,6 +552,12 @@
             <summary>Returns a normalised <see cref="T:MW.Vector.MVector"/> at fDegrees, relative to dirForward.</summary>
             <param name="fDegrees">The angle offset.</param>
             <param name="dirForward">The forward direction.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.SinCos(System.Single@,System.Single@,System.Single)">
+            <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
+            <param name="fSine">The Sine result over fValue.</param>
+            <param name="fCosine">The Cosine result over fValue.</param>
+            <param name="fValue">The angle.</param>
         </member>
         <member name="P:MW.Vector.MVector.YZ">
             <summary>A new MVector ignoring the X component.</summary>
@@ -951,26 +999,49 @@
         <member name="T:MW.HUD.UI">
             <summary>World space <see cref="T:UnityEngine.Canvas"/> scaling and <see cref="T:TMPro.TextMeshProUGUI"/> utilities.</summary>
         </member>
+        <member name="F:MW.HUD.UI.ETypewriterMode.Append">
+            <summary>Append to the current <see cref="T:TMPro.TextMeshProUGUI"/>.</summary>
+        </member>
+        <member name="F:MW.HUD.UI.ETypewriterMode.Clear">
+            <summary>Clear the current <see cref="T:TMPro.TextMeshProUGUI"/> before typewriting.</summary>
+        </member>
         <member name="M:MW.HUD.UI.ScaleSize(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Scales the canvas element relative to self.</summary>
             <param name="vSelf">The position to scale from.</param>
             <param name="vScaleWith">The position to scale with.</param>
             <returns>The relative scale size in Vector2.</returns>
         </member>
-        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.ETypewriterMode)">
-            <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
-            <param name="tmpTextMeshPro">The text to animate.</param>
-            <param name="sContent">The content to display.</param>
-            <param name="fDelay">The time gap between writing a new letter.</param>
-            <param name="mMode">Should the text append, or clear?</param>
+        <member name="M:MW.HUD.UI.Typewrite(TMPro.TextMeshProUGUI,UnityEngine.MonoBehaviour,System.String,System.Single,MW.HUD.UI.ETypewriterMode)">
+            <summary>Animates a <see cref="T:TMPro.TextMeshProUGUI"/> to display Content like a typewriter.</summary>
+            <remarks>This is an extension function on <see cref="T:TMPro.TextMeshProUGUI"/>.</remarks>
+            <param name="TMPro">The extended <see cref="T:TMPro.TextMeshProUGUI"/> <see cref="T:UnityEngine.GameObject"/>.</param>
+            <param name="Game">The <see cref="T:UnityEngine.MonoBehaviour"/> that will be responsible for invoking the Typewriter coroutine.</param>
+            <param name="Content">The content to typewrite.</param>
+            <param name="Delay">The time gap between writing a new character.</param>
+            <param name="EMode">Should the text <see cref="F:MW.HUD.UI.ETypewriterMode.Append"/>, or <see cref="F:MW.HUD.UI.ETypewriterMode.Clear"/>?</param>
+            <returns>The instance of the Typewriter coroutine.</returns>
         </member>
-        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.ETypewriterMode,System.String)">
-            <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
-            <param name="tmpTextMeshPro">The text to animate.</param>
-            <param name="sContent">The content to display.</param>
-            <param name="fDelay">The time gap between writing a new letter.</param>
-            <param name="mMode">Should the text append, or clear?</param>
-            <param name="sSound">The sound to play for every letter added on.</param>
+        <member name="M:MW.HUD.UI.Typewrite(TMPro.TextMeshProUGUI,UnityEngine.MonoBehaviour,System.String,System.Single,MW.HUD.UI.ETypewriterMode,System.String,System.Boolean)">
+            <inheritdoc cref="M:MW.HUD.UI.Typewrite(TMPro.TextMeshProUGUI,UnityEngine.MonoBehaviour,System.String,System.Single,MW.HUD.UI.ETypewriterMode)"/>
+            <param name="TMPro"></param> <param name="Game"></param> <param name="Content"></param> <param name="Delay"></param> <param name="EMode"></param>
+            <param name="Sound">The <see cref="T:MW.Audio.MSound"/> in <see cref="F:MW.Audio.MAudio._AudioInstance"/> to play when writing a character.</param>
+            <param name="bOverlapSound"></param>
+        </member>
+        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.ETypewriterMode)">
+            <summary>Animates a <see cref="T:TMPro.TextMeshProUGUI"/> to display Content like a typewriter.</summary>
+            <param name="TMPro">The text to animate.</param>
+            <param name="Content">The content to typewrite.</param>
+            <param name="Delay">The time gap between writing a new character.</param>
+            <param name="EMode">Should the text <see cref="F:MW.HUD.UI.ETypewriterMode.Append"/>, or <see cref="F:MW.HUD.UI.ETypewriterMode.Clear"/>?</param>
+        </member>
+        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.ETypewriterMode,System.String,System.Boolean)">
+            <summary>Animates a <see cref="T:TMPro.TextMeshProUGUI"/> to display Content like a typewriter.</summary>
+            <param name="TMPro">The text to animate.</param>
+            <param name="Content">The content to typewrite.</param>
+            <param name="Delay">The time gap between writing a new character.</param>
+            <param name="EMode">Should the text <see cref="F:MW.HUD.UI.ETypewriterMode.Append"/>, or <see cref="F:MW.HUD.UI.ETypewriterMode.Clear"/>?</param>
+            <param name="Sound">The <see cref="T:MW.Audio.MSound"/> in <see cref="F:MW.Audio.MAudio._AudioInstance"/> to play when writing a character.</param>
+            <param name="bOverlapSound"></param>
         </member>
     </members>
 </doc>
