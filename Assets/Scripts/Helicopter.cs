@@ -7,6 +7,8 @@ using MW.Easing;
 
 public class Helicopter : MonoBehaviour
 {
+	/// <summary>When all the soldiers are rescued, or the player has hit a tree.</summary>
+	/// <remarks>True is passed if the player has hit a tree.</remarks>
 	public Action<bool> OnGameStatus;
 
 	[SerializeField] Transform InjuredSolidersHolder;
@@ -22,6 +24,7 @@ public class Helicopter : MonoBehaviour
 
 	void Start()
 	{
+		// Updates the counter to show something at the start of the game.
 		UpdateCounter();
 
 		AllSoldiers = GameObject.FindGameObjectsWithTag("Soldier").Length;
@@ -42,7 +45,7 @@ public class Helicopter : MonoBehaviour
 		UpdateCounter();
 	}
 
-	Vector3 SoliderInHeliScale = new Vector3(.2f, .2f, 1);
+	static readonly Vector3 SoliderInHeliScale = new Vector3(.2f, .2f, 1);
 
 	void PickupSolider(Transform T)
 	{
