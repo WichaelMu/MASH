@@ -8,15 +8,9 @@ public class FLAK : MonoBehaviour
 	[SerializeField] Cannon Cannon;
 
 	[SerializeField] HelicopterMovement Target;
-	Rigidbody2D Self;
 
 	[SerializeField] float CannonSpeed = 30;
 	[SerializeField] float RoundsPerSecond = 5;
-
-	void Start()
-	{
-		Self = GetComponent<Rigidbody2D>();
-	}
 
 	void Update()
 	{
