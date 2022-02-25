@@ -10,7 +10,7 @@ public class HelicopterMovement : MPlayer2D
 
 	Camera MainCamera;
 	float HelicopterXLength = 1;
-	[MW.Editor.ReadOnly] float HelicopterYHeight = 1;
+	float HelicopterYHeight = 1;
 
 	static readonly Vector3 RotateVector = new Vector3(0, 0, -15f);
 

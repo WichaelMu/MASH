@@ -7,6 +7,6 @@ public class Audio : MAudio
 {
 	void Awake()
 	{
-		Initialise(SSounds);
+		Initialise(Sounds);
 	}
 }
