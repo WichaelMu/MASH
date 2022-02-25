@@ -22,25 +22,30 @@ public class Helicopter : MonoBehaviour
 
 	int AllSoldiers = 0;
 
+	// Tags
+	const string kSoldier = "Soldier";
+	const string kHospital = "Hospital";
+	const string kTree = "Tree";
+
 	void Start()
 	{
 		// Updates the counter to show something at the start of the game.
 		UpdateCounter();
 
-		AllSoldiers = GameObject.FindGameObjectsWithTag("Soldier").Length;
+		AllSoldiers = GameObject.FindGameObjectsWithTag(kSoldier).Length;
 		MAudio.AudioInstance.Play("ENGINE");
 	}
 
 	void OnTriggerEnter2D(Collider2D c)
 	{
-		if (SoldiersInHelicopter < 3 && c.CompareTag("Soldier"))
+		if (SoldiersInHelicopter < 3 && c.CompareTag(kSoldier))
 			PickupSolider(c.transform);
 
-		if (c.CompareTag("Hospital"))
+		if (c.CompareTag(kHospital))
 			DropAtHospital();
 
-		if (c.CompareTag("Tree"))
-			HitTree();
+		if (c.CompareTag(kTree))
+			GoDown();
 
 		UpdateCounter();
 	}
@@ -71,7 +76,7 @@ public class Helicopter : MonoBehaviour
 		RemoveSoldiers();
 	}
 
-	void HitTree()
+	public void GoDown()
 	{
 		DisplayGameStatus(true);
 

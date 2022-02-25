@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MW.Behaviour;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Helicopter))]
+[RequireComponent(typeof(Helicopter))]
 public class HelicopterMovement : MPlayer2D
 {
 	Helicopter Self;
@@ -13,6 +13,9 @@ public class HelicopterMovement : MPlayer2D
 	[MW.Editor.ReadOnly] float HelicopterYHeight = 1;
 
 	static readonly Vector3 RotateVector = new Vector3(0, 0, -15f);
+
+	Vector3 VelLastFrame;
+	Vector3 VelThisFrame;
 
 	void Start()
 	{
@@ -29,15 +32,25 @@ public class HelicopterMovement : MPlayer2D
 
 	void Update()
 	{
+		HandleMovement();
+	}
+
+	void HandleMovement()
+	{
+		// If game is won or over, stop input.
 		if (HasStoppedReceivingMovementInput())
 			return;
 
 		float HorizontalInput = Input.GetAxisRaw("Horizontal");
 		float VerticalInput = Input.GetAxisRaw("Vertical");
 
+		// Before actually moving, add the current position with the box collider boundaries and
+		// check if it is outside of the screen. (WorldToScreenPoint).
 		Vector3 ProjectedPosition = transform.position + new Vector3(HelicopterXLength * HorizontalInput, HelicopterYHeight * VerticalInput);
 		Vector3 HelicopterWorldToScreen = MainCamera.WorldToScreenPoint(ProjectedPosition);
 
+		// If the projected position of the player lies outside of the screen, stop
+		// movement in that direction.
 		if (HelicopterWorldToScreen.x < 0 || HelicopterWorldToScreen.x > Screen.width)
 		{
 			HorizontalInput = 0;
@@ -48,8 +61,13 @@ public class HelicopterMovement : MPlayer2D
 			VerticalInput = 0;
 		}
 
+		// Apply movement.
 		MovementInput(VerticalInput, HorizontalInput);
 
+		VelLastFrame = VelThisFrame;
+		VelThisFrame = new Vector3(HorizontalInput, VerticalInput) * MovementSpeed;
+
+		// Tilt the helicopter when moving horizontally.
 		transform.localEulerAngles = RotateVector * HorizontalInput;
 	}
 
@@ -58,6 +76,11 @@ public class HelicopterMovement : MPlayer2D
 		ReceiveMovementInput(true);
 		transform.eulerAngles = Vector3.zero;
 		GetComponent<Animator>().SetBool("bIsDowning", bHasLost);
+	}
+
+	public Vector3 GetVelocity()
+	{
+		return VelThisFrame;
 	}
 
 	public override void OnDestroy()
