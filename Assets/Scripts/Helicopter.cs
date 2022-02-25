@@ -64,17 +64,20 @@ public class Helicopter : MonoBehaviour
 
 	void DropAtHospital()
 	{
-		SoldiersInHospital += SoldiersInHelicopter;
-		SoldiersInHelicopter = 0;
-
-		if (SoldiersInHospital == AllSoldiers)
+		if (SoldiersInHelicopter > 0)
 		{
-			DisplayGameStatus(false);
+			SoldiersInHospital += SoldiersInHelicopter;
+			SoldiersInHelicopter = 0;
+
+			if (SoldiersInHospital == AllSoldiers)
+			{
+				DisplayGameStatus(false);
+			}
+
+			MAudio.AudioInstance.Play("RESCUED");
+
+			RemoveSoldiers();
 		}
-
-		MAudio.AudioInstance.Play("RESCUED");
-
-		RemoveSoldiers();
 	}
 
 	public void GoDown()
