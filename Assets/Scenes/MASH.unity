@@ -1050,7 +1050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Missile: {fileID: 5161072814379719277, guid: 8e2fab0d3312aac45b0f84815a18457d, type: 3}
   Target: {fileID: 528200174}
-  MissileSpeed: 2500
+  MissileSpeed: 400
   MissileTurnDegreesDelta: 15
   SecondsBetweenLaunches: 5
 --- !u!1 &376549898
@@ -2577,45 +2577,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bMuteAllByDefault: 0
-  SSounds:
+  Sounds:
   - ACSource: {fileID: 8300000, guid: d01ecad8f224a874a8726c7404bc0f7c, type: 3}
-    sName: ONPICKUP
+    Name: ONPICKUP
     fVolume: 1
     fPitch: 1
     bLoop: 0
     ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: a2b51445a40548f4bb0b94a93ad51604, type: 3}
-    sName: ENGINE
+    Name: ENGINE
     fVolume: 1
     fPitch: 1
-    bLoop: 1
+    bLoop: 0
     ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: 949840bb53a59674fa82cb9820605ad5, type: 3}
-    sName: CRASH
-    fVolume: 0.1
+    Name: CRASH
+    fVolume: 0.2
     fPitch: 1
     bLoop: 0
     ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: 3eb7201ee72623f4b900827ee945792c, type: 3}
-    sName: EXPLOSION
+    Name: EXPLOSION
     fVolume: 1
     fPitch: 1
     bLoop: 0
     ASSound: {fileID: 0}
-  - ACSource: {fileID: 8300000, guid: 0d2fc649d740d7444a94a7f944ab1243, type: 3}
-    sName: LAUNCH
-    fVolume: 0.5
-    fPitch: 1
-    bLoop: 0
-    ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: a239ffd0f5a9bcf45ba2a28ac05d353f, type: 3}
-    sName: CANNON
+    Name: CANNON
     fVolume: 0.3
     fPitch: 1
     bLoop: 0
     ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: 0d2fc649d740d7444a94a7f944ab1243, type: 3}
+    Name: LAUNCH
+    fVolume: 1
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: 2a7596d34e0e4164783021e3d39a4500, type: 3}
-    sName: RESCUED
+    Name: RESCUED
     fVolume: 1
     fPitch: 1
     bLoop: 0

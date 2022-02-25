@@ -22,7 +22,7 @@ public class Missile : MonoBehaviour
 		Destroy(gameObject, 5);
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		Kinematics.HomeTowards(Self, Target, Speed, MaxDegreesDelta);
 	}
