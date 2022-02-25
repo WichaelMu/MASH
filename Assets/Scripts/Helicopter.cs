@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using MW.Audio;
-using MW.Diagnostics;
 using MW.Easing;
 
 public class Helicopter : MonoBehaviour
@@ -72,6 +71,8 @@ public class Helicopter : MonoBehaviour
 		{
 			DisplayGameStatus(false);
 		}
+
+		MAudio.AudioInstance.Play("RESCUED");
 
 		RemoveSoldiers();
 	}

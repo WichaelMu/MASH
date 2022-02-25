@@ -1717,7 +1717,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.033819865, g: 0.0754717, b: 0.044232823, a: 0}
+  m_BackGroundColor: {r: 0.11294054, g: 0.16981131, b: 0.124314696, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2598,6 +2598,24 @@ MonoBehaviour:
     ASSound: {fileID: 0}
   - ACSource: {fileID: 8300000, guid: 3eb7201ee72623f4b900827ee945792c, type: 3}
     sName: EXPLOSION
+    fVolume: 1
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: 0d2fc649d740d7444a94a7f944ab1243, type: 3}
+    sName: LAUNCH
+    fVolume: 0.5
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: a239ffd0f5a9bcf45ba2a28ac05d353f, type: 3}
+    sName: CANNON
+    fVolume: 0.3
+    fPitch: 1
+    bLoop: 0
+    ASSound: {fileID: 0}
+  - ACSource: {fileID: 8300000, guid: 2a7596d34e0e4164783021e3d39a4500, type: 3}
+    sName: RESCUED
     fVolume: 1
     fPitch: 1
     bLoop: 0

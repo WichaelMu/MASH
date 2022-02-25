@@ -13,8 +13,8 @@ public class Cannon : MonoBehaviour
 	{
 		this.CannonSpeed = CannonSpeed;
 		
-		// Destroy after 20 seconds.
-		Destroy(gameObject, 20);
+		// Destroy after args[1] seconds.
+		Destroy(gameObject, 7.5f);
 	}
 	
 	void Update()

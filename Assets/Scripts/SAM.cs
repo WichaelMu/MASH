@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using MW.Audio;
 
 public class SAM : MonoBehaviour
 {
@@ -20,6 +19,8 @@ public class SAM : MonoBehaviour
 			Launch(MissileSpeed, MissileTurnDegreesDelta);
 
 			LastLaunchTime = Time.time;
+
+			MAudio.AudioInstance.Play("LAUNCH");
 		}
 	}
 

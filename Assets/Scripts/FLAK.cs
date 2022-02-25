@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using MW.Audio;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class FLAK : MonoBehaviour
@@ -31,6 +30,8 @@ public class FLAK : MonoBehaviour
 			c.Initialise(CannonSpeed);
 
 			LastFiredTime = Time.time;
+
+			MAudio.AudioInstance.Play("CANNON", true);
 		}
 	}
 
